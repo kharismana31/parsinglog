@@ -1,15 +1,12 @@
 import rpyc
-import logging
 import threading
 import os.path
-import cPickle as pickle
+import time
 
-# logging.basicConfig(level=logging.DEBUG, format='(%(threadName)-10s) %(message)s', )
 path = '/home/administrator/sister/distributed-systems/RMI/var/log/cups/'
 num_files = len([f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f)) and f.startswith('error_log')])
+hasil = {}
 
-#banyak_file = len(os.listdir("cups"))
-#print num_files
 with open('ip.txt','r') as bukafile:
 	ipini = str(bukafile.read()).split('\n')
 	print ipini
@@ -19,9 +16,10 @@ class MyThread(threading.Thread):
 	def __init__(self, i):
 		threading.Thread.__init__(self)
 		self.i = i
+		self.process = None
 
 	def run(self):
-		logging.debug(str(self.i) + ' running')
+		self.process = 1
 		proxy = rpyc.connect(ipini[self.i], 18861, config={'allow_public_attrs': True})
 		nama_file = ""
 		linecount = ""
@@ -36,11 +34,19 @@ class MyThread(threading.Thread):
 			#print nama_file
 			iter=iter+3
 		print linecount, ipini[self.i]
-		print type(linecount)
-		#dowo = int(len(linecount))
-		#print dowo
-		#for x,y in range(0,dowo) :
-		#	print x,y
+		print hasil
+		for key in linecount :
+			print("{} = {}".format(key, linecount[key]))
+			#print type(key), type(linecount[key])
+			
+			#if key not in linecount :
+			#	hasil[key] = linecount[key]
+			#	print("{} = {}".format(key, linecount[key]))
+			#else :
+			#	hasil[key] += linecount[key]
+				#print("{} = {}".format(key, linecount[key]))
+		#print hasil
+
 
 for i in range(0, panjang):
 	t = MyThread(i)
