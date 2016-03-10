@@ -4,7 +4,7 @@ import threading
 import os.path
 
 banyak_file = len(os.listdir("cups"))
-#print num_files
+
 with open('ip.txt','r') as bukafile:
 	ipini = str(bukafile.read()).split('\n')
 	print ipini
